@@ -1,4 +1,6 @@
 package com.planner.planner.activities;
 
-public record ActivityResponse(String activityId) {
+import java.util.UUID;
+
+public record ActivityResponse(UUID activityId) {
 }

@@ -2,6 +2,7 @@ package com.planner.planner.activities;
 
 import com.planner.planner.trip.Trip;
 import jakarta.persistence.*;
+import jdk.jfr.Name;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,15 +24,15 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @Column(nullable = false)
+    private String title;
+
     @Column(name = "occurs_at", nullable = false)
     private LocalDateTime occursAt;
 
     @ManyToOne
     @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
-
-    @Column(nullable = false)
-    private String title;
 
     public UUID getId() {
         return id;
@@ -42,5 +43,4 @@ public class Activity {
         this.occursAt = LocalDateTime.parse(occursAt, DateTimeFormatter.ISO_DATE_TIME);
         this.trip = trip;
     }
-
 }
