@@ -1,5 +1,6 @@
 package com.planner.planner.trip;
 
+import com.planner.planner.activities.ActivityRequestPayload;
 import com.planner.planner.participant.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -98,6 +99,25 @@ public class TripController {
         List<PartcipantData> participantList = this.participantService.getAllPartcipantsFromEvent(id);
 
         return ResponseEntity.ok(participantList);
+    }
+
+    @PostMapping("/{id}/activities")
+    public ResponseEntity<String> registerActivity(@PathVariable UUID id, @RequestBody ActivityRequestPayload payload) {
+        Optional<Trip> trip = repository.findById(id);
+
+        if (trip.isPresent()) {
+            Trip rawTrip = trip.get();
+
+            PartcipantCreateResponse partcipantResponse = this.participantService.registerPartcipantToEvent(payload.email(), rawTrip);
+
+            if (rawTrip.getConfirmed()) {
+                this.participantService.triggerConfirmationEmailToParticipant(payload.email());
+            }
+
+            return ResponseEntity.ok(partcipantResponse);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
 }
