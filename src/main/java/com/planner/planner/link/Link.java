@@ -1,24 +1,21 @@
-package com.planner.planner.activities;
+package com.planner.planner.link;
 
 import com.planner.planner.trip.Trip;
 import jakarta.persistence.*;
-import jdk.jfr.Name;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "activities")
+@Table(name = "links")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Activity {
+public class Link {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,20 +24,28 @@ public class Activity {
     @Column(nullable = false)
     private String title;
 
-    @Column(name = "occurs_at", nullable = false)
-    private LocalDateTime occursAt;
+    @Column(nullable = false)
+    private String url;
 
     @ManyToOne
     @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
 
+    public Link(String title, String url, Trip trip) {
+        this.title = title;
+        this.url = url;
+        this.trip = trip;
+    }
+
     public UUID getId() {
         return id;
     }
 
-    public Activity(String title, String occursAt, Trip trip){
-        this.title = title;
-        this.occursAt = LocalDateTime.parse(occursAt, DateTimeFormatter.ISO_DATE_TIME);
-        this.trip = trip;
+    public String getUrl() {
+        return url;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }
